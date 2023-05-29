@@ -10,34 +10,31 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.example.mediumcom.R
+import com.example.mediumcom.databinding.ActivityMainBinding.inflate
+import com.example.mediumcom.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
 
-    private lateinit var editTextEmail: EditText
-    private lateinit var editTextPassword: EditText
-    private lateinit var buttonLogin: Button
-    private lateinit var textViewRegister:TextView
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        editTextEmail = view?.findViewById(R.id.editTextEmail)!!
-        editTextPassword = view?.findViewById(R.id.editTextPassword)!!
-        buttonLogin = view?.findViewById(R.id.buttonLogin)!!
-        textViewRegister=view?.findViewById(R.id.textViewRegister)!!
+
+        val textViewRegister = binding.textViewRegister
 
         textViewRegister.setOnClickListener {
-            Log.e("Log","Sign up")
-            val intent = Intent(requireContext(), SignUpFragment::class.java)
-            startActivity(intent)
-
+            Log.e("Log", "Sign up")
+            findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
+        return binding.root
 
     }
 

@@ -1,11 +1,9 @@
 package com.example.mediumcom.utils
 
-sealed class Resource<T>(
-    val data: T? = null,
-    val message: UiMessage? = null,
-) {
-    class Success<T>(data: T, message: UiMessage? = null) : Resource<T>(data, message)
-    class Error<T>(data: T? = null, message: UiMessage) : Resource<T>(data, message)
+sealed class Resource<T>(val data: T? = null, val message: String? = null) {
+    class Loading<T> : Resource<T>()
+    class Success<T>(data: T? = null) : Resource<T>(data = data)
+    class Error<T>(message: String?) : Resource<T>(message = message)
 }
 
 

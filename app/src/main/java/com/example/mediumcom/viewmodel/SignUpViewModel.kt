@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mediumcom.model.request.UserRequest
 import com.example.mediumcom.model.response.UserResponse
 import com.example.mediumcom.repository.UserRepository
+import com.example.mediumcom.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,7 +21,7 @@ class SignUpViewModel(val repository: UserRepository) : ViewModel() {
 
     }
 
-    val user: LiveData<UserResponse>
+    val user: LiveData<Resource<UserResponse>>
         get() = repository.userResponse
 
 

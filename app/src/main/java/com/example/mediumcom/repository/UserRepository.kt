@@ -14,21 +14,26 @@ import java.io.IOException
 
 class UserRepository(private val apiService: ApiService) {
 
-    private val _userResponse = MutableLiveData<UserResponse>() //jo kahi response bhetnar aahe to
-    val userResponse: LiveData<UserResponse> //public accessible
+    private val _userResponse = MutableLiveData<Resource<UserResponse>>()
+    val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
 
     suspend fun createUser(userRequest: UserRequest) { // request data
+        _userResponse.postValue(Resource.Loading())
         try {
             val result = apiService.createUser(userRequest)
             if (result?.body() != null) {
-                _userResponse.postValue(result.body())
+                _userResponse.postValue(Resource.Success(result.body()))
+
+            } else {
+                _userResponse.postValue(Resource.Error("Somethings went to wrong"))
 
             }
         } catch (e: IOException) {
-       //     Resource.Error(message = UiMessage.StringResource(R.string.internet_connection))
+            _userResponse.postValue(Resource.Error("No internet Connection"))
+
         } catch (e: HttpException) {
-          //  Resource.Error(message = UiMessage.StringResource(R.string.error_something_went_wrong))
+            _userResponse.postValue(Resource.Error(e.message.toString()))
         }
 
     }

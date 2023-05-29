@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,7 @@ import com.example.mediumcom.model.request.User1
 import com.example.mediumcom.model.request.UserRequest
 import com.example.mediumcom.model.response.UserResponse
 import com.example.mediumcom.repository.UserRepository
+import com.example.mediumcom.utils.Resource
 import com.example.mediumcom.viewmodel.MainViewModelFactory
 import com.example.mediumcom.viewmodel.SignUpViewModel
 
@@ -28,10 +30,10 @@ import com.example.mediumcom.viewmodel.SignUpViewModel
 class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignUpBinding? = null
+    private lateinit var progressBar: ProgressBar
 
     private val binding get() = _binding!!
     private lateinit var signUpViewModel: SignUpViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +46,8 @@ class SignUpFragment : Fragment() {
         val editTextEmail = binding.editTextEmail
         val editTextPassword = binding.editTextPassword
         val buttonLogin = binding.buttonLogin
+        progressBar =binding.progressBar
+
 
         val apiService = RetrofitHelper.createService(ApiService::class.java)
         val repository = UserRepository(apiService)
@@ -91,13 +95,33 @@ class SignUpFragment : Fragment() {
 
         signUpViewModel.user.observe(viewLifecycleOwner, Observer {
             Log.e("TAG", "New User Created")
-          //  findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+            when (it) {
+
+                is Resource.Loading -> {
+                    progressBar.visibility = View.VISIBLE
 
 
+                }
+
+                is Resource.Error -> {
+                    progressBar.visibility = View.INVISIBLE
+                    Toast.makeText(requireContext(), "Somethings went to wrong", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+
+                is Resource.Success -> {
+                    progressBar.visibility = View.INVISIBLE
+                    findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+                    Toast.makeText(requireContext(), "New User Created", Toast.LENGTH_SHORT).show()
+
+                }
+            }
         })
 
 
     }
+
 
 
 }

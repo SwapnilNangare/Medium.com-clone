@@ -26,6 +26,7 @@ class UserRepository(private val apiService: ApiService) {
                 _userResponse.postValue(Resource.Success(result.body()))
 
             } else {
+                _userResponse.postValue(Resource.Loading())
                 _userResponse.postValue(Resource.Error("Somethings went to wrong"))
 
             }

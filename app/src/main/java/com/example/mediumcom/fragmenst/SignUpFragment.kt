@@ -112,8 +112,8 @@ class SignUpFragment : Fragment() {
 
                 is Resource.Success -> {
                     progressBar.visibility = View.INVISIBLE
-                    findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
                     Toast.makeText(requireContext(), "New User Created", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
 
                 }
             }
